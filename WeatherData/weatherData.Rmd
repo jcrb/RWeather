@@ -1,0 +1,42 @@
+Librairie weatherData
+========================================================
+
+[source](http://cran.r-project.org/web/packages/weatherData/weatherData.pdf)
+
+initialisation:
+```{r init}
+library("weatherData")
+```
+Utilise:
+- le code s'une station météo sous la forme d'un sigle aéroportuaire: Strasbourg = LFST
+- la date du jour
+
+Afficher la météo du jour
+-------------------------
+
+La méthode __getDetailedWeather__ donne les infos le jour donné sous forme d'un dataframe.
+
+- __opt_all_columns = TRUE__ affiche toutes les infos disponibles par heure. Par défaut (FALSE) n'affiche que les températures.
+- __opt_custom_columns__ permet un choix personalisé des colonnes à afficher. Par défaut vaut FALSE. Si on met TRUE, il faut obligatoirement renseigner l'option _custom_columns-.
+- __custom_columns__ vecteur d'INTEGER inqiquant le n° de la colonne à afficher. La première colonne (_Time_) est toujours affichée. Il est donc inutile de le péciser. La numérotation effective commence à 2. Par exemple or afficher la température et la pression: names(getDetailedWeather("LFST", "2014-06-10", opt_custom_columns=TRUE, custom_columns=c(2,5) ))
+
+
+```{r mto_jour}
+today <- ("2014-06-10")
+station <- "LFST"
+t <- getDetailedWeather(station, today, opt_all_columns = TRUE)
+names(t)
+str(t)
+head(t)
+```
+```{}
+##  [1] "Time"                  "TimeCEST"             
+##  [3] "TemperatureC"          "Dew_PointC"           
+##  [5] "Humidity"              "Sea_Level_PressurehPa"
+##  [7] "VisibilityKm"          "Wind_Direction"       
+##  [9] "Wind_SpeedKm_h"        "Gust_SpeedKm_h"       
+## [11] "Precipitationmm"       "Events"               
+## [13] "Conditions"            "WindDirDegrees"       
+## [15] "DateUTC"
+```
+

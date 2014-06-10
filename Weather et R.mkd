@@ -1,0 +1,96 @@
+Weather et R
+============
+
+Chapitres
+---------
+1. RWeather
+
+2. RNOAA
+
+
+RWeather
+========
+
+sources:
+- http://ramnarasimhan.wordpress.com/2012/12/#initResults
+- http://www.mv-voice.com/blogs/p/2014/04/17/analyze-data-yourself-with-r---a-fast-growing-language-for-statistics-forecasting-and-graphs
+- [Open Weather map](http://openweathermap.org/city/2973783)
+- [R and the weather in the local news](http://blog.revolutionanalytics.com/2014/04/r-and-the-weather-in-the-local-news.html)
+- [CRU TS 1.2](http://www.cru.uea.ac.uk/cru/data/hrg/timm/grid/CRU_TS_1_2.html)
+
+
+Essais
+-------
+```
+install.packages("weatherData")
+library("weatherData")
+getWeatherForDate("LAX", "2013-01-01")
+getStationCode("Strasbourg")
+getWeatherForDate("LFST", "2013-01-01")
+getWeatherForDate("LFST", "2014-04-21")
+getWeatherForDate("LFST", "2014-04-22")
+getCurrentTemperature(station ="LFST")
+```
+
+La méthode **getWeatherData** permet d'obtenir une météo complète à condition de préciser **opt_temperature_only = FALSE**:
+__CETTE METHODE SEMBLE AVOIR DISPARU ?__.
+
+```
+t <- getWeatherData("LFST", "2014-04-21", opt_temperature_only = F)
+names(t)
+ [1] "TimeCEST"  "TemperatureC"  "Dew.PointC"  "Humidity" "Sea.Level.PressurehPa" "VisibilityKm"         
+ [7] "Wind.Direction"        "Wind.SpeedKm.h"        "Gust.SpeedKm.h"        "Precipitationmm"       "Events"                "Conditions"           
+[13] "WindDirDegrees"        "DateUTC"               "DateTime" 
+
+ head(t)
+  TimeCEST TemperatureC Dew.PointC Humidity Sea.Level.PressurehPa VisibilityKm Wind.Direction Wind.SpeedKm.h Gust.SpeedKm.h Precipitationmm Events    Conditions
+1 10:00 AM           12          6       57                  1005           40            WNW            1.9                                               Clear
+2 10:00 AM           12          6       67                  1004           10       Variable            1.9              -             N/A        Mostly Cloudy
+3 10:00 PM           12         10       85                  1006           21          South            7.4                                               Clear
+4 10:00 PM           12         10       88                  1006           10          South            7.4              -             N/A              Unknown
+5  1:00 AM           10          6       71                  1004           15           Calm           Calm                                               Clear
+6  1:00 AM           10          6       76                  1004           10           Calm           Calm              -             N/A              Unknown
+  WindDirDegrees             DateUTC            DateTime
+1            300 2014-04-21 08:00:00 2014-04-21 10:00:00
+2              0 2014-04-21 08:00:00 2014-04-21 10:00:00
+3            170 2014-04-21 20:00:00 2014-04-21 22:00:00
+4            170 2014-04-21 20:00:00 2014-04-21 22:00:00
+5             NA 2014-04-20 23:00:00 2014-04-21 01:00:00
+6              0 2014-04-20 23:00:00 2014-04-21 01:00:00
+```
+
+Etude de cas
+============
+
+Le 24/04/2014 jogging à 15 heures puis gros orage vers 17 heures:
+
+```
+t <- getWeatherData("LFST", "2014-04-23", opt_temperature_only = F)
+str(t)
+# on trie le vecteur DateTime. Le vecteur o contient l'ordre dans lequel doivent être rangée les données du vecteur DateTime:
+o <- order(t$DateTime)
+
+# on utilise o pour ranger les autres données:
+b <- t$DateTime[o]
+c <- t$TemperatureC[o]
+d <- t$Sea.Level.PressurehPa[o]
+# on crée une matrice:
+w <- cbind(a,b,c,d)
+# graphe des températures et pressions
+plot(b, w[,3], type="l", main="24 avril 2014", ylab="Température °C", xlab="Heures")
+plot(b, w[,4], type="l")
+```
+
+RNOAA
+=====
+
+- [source github](https://github.com/ropensci/rnoaa). Couvre tous les pays. Access climate data from NOAA, including temperature and precipitation, as well as sea ice cover data, and extreme weather events
+
+Fait partie du [rOpenSci packages](http://ropensci.org/packages/)
+
+getDetailedWeather
+==================
+
+- opt_all_columns = TRUE si on veut voir tous les détails:
+
+
