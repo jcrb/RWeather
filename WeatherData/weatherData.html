@@ -197,7 +197,13 @@ hljs.initHighlightingOnLoad();
 
 <h2>Afficher la météo du jour</h2>
 
-<p>La méthode <strong>getDetailedWeather</strong> donne les infos le jour donné</p>
+<p>La méthode <strong>getDetailedWeather</strong> donne les infos le jour donné sous forme d&#39;un dataframe.</p>
+
+<ul>
+<li><strong>opt_all_columns = TRUE</strong> affiche toutes les infos disponibles par heure. Par défaut (FALSE) n&#39;affiche que les températures.</li>
+<li><strong>opt_custom_columns</strong> permet un choix personalisé des colonnes à afficher. Par défaut vaut FALSE. Si on met TRUE, il faut obligatoirement renseigner l&#39;option _custom_columns-.</li>
+<li><strong>custom_columns</strong> vecteur d&#39;INTEGER inqiquant le n° de la colonne à afficher. La première colonne (<em>Time</em>) est toujours affichée. Il est donc inutile de le péciser. La numérotation effective commence à 2. Par exemple or afficher la température et la pression: names(getDetailedWeather(&ldquo;LFST&rdquo;, &ldquo;2014-06-10&rdquo;, opt_custom_columns=TRUE, custom_columns=c(2,5) ))</li>
+</ul>
 
 <pre><code class="r">today &lt;- (&quot;2014-06-10&quot;)
 station &lt;- &quot;LFST&quot;
@@ -218,7 +224,7 @@ names(t)
 <pre><code class="r">str(t)
 </code></pre>
 
-<pre><code>## &#39;data.frame&#39;:    56 obs. of  15 variables:
+<pre><code>## &#39;data.frame&#39;:    71 obs. of  15 variables:
 ##  $ Time                 : POSIXct, format: &quot;2014-06-10 00:00:00&quot; &quot;2014-06-10 00:00:00&quot; ...
 ##  $ TimeCEST             : chr  &quot;12:00 AM&quot; &quot;12:00 AM&quot; &quot;12:30 AM&quot; &quot;1:00 AM&quot; ...
 ##  $ TemperatureC         : num  29 29 29 27 27 27 25 25 25 24 ...
@@ -267,6 +273,16 @@ names(t)
 ## 4 2014-06-09 23:00:00
 ## 5 2014-06-09 23:00:00
 ## 6 2014-06-09 23:30:00
+</code></pre>
+
+<pre><code>##  [1] &quot;Time&quot;                  &quot;TimeCEST&quot;             
+##  [3] &quot;TemperatureC&quot;          &quot;Dew_PointC&quot;           
+##  [5] &quot;Humidity&quot;              &quot;Sea_Level_PressurehPa&quot;
+##  [7] &quot;VisibilityKm&quot;          &quot;Wind_Direction&quot;       
+##  [9] &quot;Wind_SpeedKm_h&quot;        &quot;Gust_SpeedKm_h&quot;       
+## [11] &quot;Precipitationmm&quot;       &quot;Events&quot;               
+## [13] &quot;Conditions&quot;            &quot;WindDirDegrees&quot;       
+## [15] &quot;DateUTC&quot;
 </code></pre>
 
 </body>
