@@ -36,8 +36,14 @@ La méthode **getWeatherData** permet d'obtenir une météo complète à conditi
 __CETTE METHODE SEMBLE AVOIR DISPARU ?__.
 
 ```
-t <- getWeatherData("LFST", "2014-04-21", opt_temperature_only = F)
+# teste si le jour est disponible
+checkDataAvailability(station_id = "LFST", check_date = "2015-07-04")
+
+# météo du jour:
+t <- getDetailedWeather(station_id = "LFST", date = format(Sys.time(), "%Y-%m-%d"), opt_all_columns = TRUE)
+
 names(t)
+
  [1] "TimeCEST"  "TemperatureC"  "Dew.PointC"  "Humidity" "Sea.Level.PressurehPa" "VisibilityKm"         
  [7] "Wind.Direction"        "Wind.SpeedKm.h"        "Gust.SpeedKm.h"        "Precipitationmm"       "Events"                "Conditions"           
 [13] "WindDirDegrees"        "DateUTC"               "DateTime" 
@@ -80,6 +86,10 @@ w <- cbind(a,b,c,d)
 plot(b, w[,3], type="l", main="24 avril 2014", ylab="Température °C", xlab="Heures")
 plot(b, w[,4], type="l")
 ```
+
+Météo du mois
+-------------
+
 
 RNOAA
 =====
