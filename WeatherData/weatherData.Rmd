@@ -11,8 +11,21 @@ Utilise:
 - le code s'une station météo sous la forme d'un sigle aéroportuaire: Strasbourg = LFST
 - la date du jour
 
+Station météo
+=============
+
+Damgan
+------
+- http://www.meteo-damgan.fr/ météo complète + horaires des marées
+- indicatif de la station: IBRETAGN30
+
+Aéroport de Vannes
+------------------
+- C'est le plus proche de Pluherlin
+- indicatif: LFRV
+
 Afficher la météo du jour
--------------------------
+=========================
 
 La méthode __getDetailedWeather__ donne les infos le jour donné sous forme d'un dataframe.
 
