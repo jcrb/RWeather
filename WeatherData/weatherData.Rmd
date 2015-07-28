@@ -1,3 +1,19 @@
+---
+title: "Weather Data"
+author: "JcB"
+date: "28/07/2015"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    fig_height: 6
+    fig_width: 8
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+---
+
 Librairie weatherData
 ========================================================
 
@@ -13,6 +29,12 @@ Utilise:
 
 Station météo
 =============
+
+Alsace
+------
+ - STRASBOURG/ENTZH __LFST__
+ - BALE/MULHOUSE    __LFSB__
+ - COLMAR/MEYENHEIM __LFSC__
 
 Damgan
 ------
@@ -32,8 +54,6 @@ La méthode __getDetailedWeather__ donne les infos le jour donné sous forme d'u
 - __opt_all_columns = TRUE__ affiche toutes les infos disponibles par heure. Par défaut (FALSE) n'affiche que les températures.
 - __opt_custom_columns__ permet un choix personalisé des colonnes à afficher. Par défaut vaut FALSE. Si on met TRUE, il faut obligatoirement renseigner l'option _custom_columns-.
 - __custom_columns__ vecteur d'INTEGER inqiquant le n° de la colonne à afficher. La première colonne (_Time_) est toujours affichée. Il est donc inutile de le péciser. La numérotation effective commence à 2. Par exemple or afficher la température et la pression: names(getDetailedWeather("LFST", "2014-06-10", opt_custom_columns=TRUE, custom_columns=c(2,5) ))
-
-Jour de canicule: 2015-07-04
 
 ```{r mto_jour}
 today <- format(Sys.time(), "%Y-%m-%d")
@@ -64,13 +84,63 @@ barplot(t[,3], ylab = "température (°C)", xlab = "heures")
 Température du mois
 ===================
 
-```{r}
-start_date <- "2015-06-01"
-end_date <- "2015-07-04"
-tm <- getWeatherForDate("LFST", start_date=start_date, end_date=end_date, opt_all_columns = TRUE)
+```{r, message=FALSE}
+
 library(xts)
+
+start_date <- "2015-06-01"
+end_date <- "2015-07-28"
+
+# Strasbourg
+station = "LFST"
+tm <- getWeatherForDate(station, start_date=start_date, end_date=end_date, opt_all_columns = TRUE)
 xt <- xts(tm[, c(3, 4, 5)], order.by = tm[,1])
-plot(xt[,1], ylim = c(0,50))
+plot(xt[,1], ylim = c(0,50), main = "Evolution des températures à Strasbourg")
+lines(xt[,3], ylim = c(0,50))
+lines(xt[,2], ylim = c(0,50), lty = 3, col = "green")
+abline(h = 34, lty = 2, col = "red")
+abline(h = 19, lty = 2, col = "red")
+
+# Mulhouse
+station = "LFSB"
+tm <- getWeatherForDate(station, start_date=start_date, end_date=end_date, opt_all_columns = TRUE)
+xt <- xts(tm[, c(3, 4, 5)], order.by = tm[,1])
+plot(xt[,1], ylim = c(0,50), main = "Evolution des températures à Mulhouse")
+lines(xt[,3], ylim = c(0,50))
+lines(xt[,2], ylim = c(0,50), lty = 3, col = "green")
+abline(h = 35, lty = 2, col = "red")
+abline(h = 19, lty = 2, col = "red")
+
+# Colmar
+station = "LFSC"
+tm <- getWeatherForDate(station, start_date=start_date, end_date=end_date, opt_all_columns = TRUE)
+xt <- xts(tm[, c(3, 4, 5)], order.by = tm[,1])
+plot(xt[,1], ylim = c(0,50), main = "Evolution des températures à Colmar")
+lines(xt[,3], ylim = c(0,50))
+lines(xt[,2], ylim = c(0,50), lty = 3, col = "green")
+abline(h = 35, lty = 2, col = "red")
+abline(h = 19, lty = 2, col = "red")
 
 ```
+
+Quand déclare-t-on l'état de canicule ?
+=======================================
+
+Par définition, on parle de canicule lorsque les températures observées sont élevées jour et nuit pendant trois jours d’affilée. « Plus il fait chaud le jour, plus on fatigue. Plus il fait chaud la nuit, moins on récupère », explique Météo France.
+
+L’organisme météorologique a déterminé des seuils d’alerte à partir de trente années de données quotidiennes de mortalité et de différents indicateurs météorologiques. Il les compare à des indicateurs biométéorologiques calculés à partir des températures minimales et maximales quotidiennes, en fonction de ses prévisions.
+
+Les diverses régions de France étant plus ou moins habituées et donc adaptées à la chaleur, les seuils d’alertes ne sont pas les mêmes partout. Ainsi, Météo France estime que la canicule sera avérée dans les Deux-Sèvres lorsque des températures minimales de 35 °C le jour et 20 °C la nuit seront observées. La Haute-Loire, elle, sera considérée en canicule lorsque les températures dépasseront 32 °C le jour et 18 °C la nuit. A Paris, ces seuils sont de 31 °C le jour et 21 °C la nuit, ou encore à Marseille de 35 °C le jour et 24 °C la nuit.
+
+En savoir plus sur http://www.lemonde.fr/les-decodeurs/article/2015/07/01/comment-le-plan-national-canicule-fonctionne-t-il_4665550_4355770.html#lswgUrOuwTvwuW6g.99
+
+Jour de canicule: 2015-07-04
+
+Département  |  Jour  |  Nuit   
+-------------|--------|-------   
+Bas-Rhin   |  34  |  19   
+Haut-Rhin  |  35  |  19   
+Moselle    |  34  |  19   
+Vosges     |  34  |  18   
+Meurthe&M  |  34  |  18
 
