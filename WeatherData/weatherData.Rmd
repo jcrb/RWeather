@@ -11,8 +11,21 @@ Utilise:
 - le code s'une station météo sous la forme d'un sigle aéroportuaire: Strasbourg = LFST
 - la date du jour
 
+Station météo
+=============
+
+Damgan
+------
+- http://www.meteo-damgan.fr/ météo complète + horaires des marées
+- indicatif de la station: IBRETAGN30
+
+Aéroport de Vannes
+------------------
+- C'est le plus proche de Pluherlin
+- indicatif: LFRV
+
 Afficher la météo du jour
--------------------------
+=========================
 
 La méthode __getDetailedWeather__ donne les infos le jour donné sous forme d'un dataframe.
 
@@ -20,14 +33,23 @@ La méthode __getDetailedWeather__ donne les infos le jour donné sous forme d'u
 - __opt_custom_columns__ permet un choix personalisé des colonnes à afficher. Par défaut vaut FALSE. Si on met TRUE, il faut obligatoirement renseigner l'option _custom_columns-.
 - __custom_columns__ vecteur d'INTEGER inqiquant le n° de la colonne à afficher. La première colonne (_Time_) est toujours affichée. Il est donc inutile de le péciser. La numérotation effective commence à 2. Par exemple or afficher la température et la pression: names(getDetailedWeather("LFST", "2014-06-10", opt_custom_columns=TRUE, custom_columns=c(2,5) ))
 
+Jour de canicule: 2015-07-04
 
 ```{r mto_jour}
-today <- ("2014-06-10")
+today <- format(Sys.time(), "%Y-%m-%d")
 station <- "LFST"
+
+checkDataAvailability(station_id = "LFST", check_date = today)
+
+station <- "LFST"# strasbourg
+
 t <- getDetailedWeather(station, today, opt_all_columns = TRUE)
 names(t)
 str(t)
 head(t)
+t[, c("TimeCEST", "TemperatureC","Sea_Level_PressurehPa")]
+barplot(t[,3], ylab = "température (°C)", xlab = "heures")
+
 ```
 ```{}
 ##  [1] "Time"                  "TimeCEST"             
@@ -38,5 +60,17 @@ head(t)
 ## [11] "Precipitationmm"       "Events"               
 ## [13] "Conditions"            "WindDirDegrees"       
 ## [15] "DateUTC"
+```
+Température du mois
+===================
+
+```{r}
+start_date <- "2015-06-01"
+end_date <- "2015-07-04"
+tm <- getWeatherForDate("LFST", start_date=start_date, end_date=end_date, opt_all_columns = TRUE)
+library(xts)
+xt <- xts(tm[, c(3, 4, 5)], order.by = tm[,1])
+plot(xt[,1], ylim = c(0,50))
+
 ```
 
